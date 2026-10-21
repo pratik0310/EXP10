@@ -152,7 +152,7 @@ CUSTOM_CSS = """
 diag_info = get_system_diagnostics()
 default_low_vram = diag_info["cuda_available"] and (diag_info["vram_total_gb"] <= 4.5)
 
-with gr.Blocks(title="Text-to-Video Foundation Studio", css=CUSTOM_CSS, theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate")) as demo:
+with gr.Blocks(title="Text-to-Video Foundation Studio") as demo:
     gr.Markdown("""
     # Text-to-Video Foundation Studio
     Generate short, high-coherence video clips directly from text descriptions using open-source video foundation models.
@@ -346,4 +346,6 @@ if __name__ == "__main__":
         server_name="127.0.0.1",
         server_port=7860,
         inbrowser=True,
+        theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate"),
+        css=CUSTOM_CSS,
     )
