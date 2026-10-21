@@ -240,7 +240,22 @@ def generate_video(
             generator=generator,
         )
         
-        video_frames = result.frames[0] if isinstance(result.frames, list) else result.frames
+        raw_frames = result.frames
+        if isinstance(raw_frames, np.ndarray):
+            video_frames = raw_frames[0] if raw_frames.ndim == 5 else raw_frames
+        elif isinstance(raw_frames, list):
+            video_frames = raw_frames[0]
+        else:
+            video_frames = raw_frames
+
+        if isinstance(video_frames, np.ndarray):
+            if video_frames.dtype != np.uint8:
+                if video_frames.max() <= 1.0:
+                    video_frames = (video_frames * 255).astype(np.uint8)
+                else:
+                    video_frames = video_frames.astype(np.uint8)
+            if video_frames.ndim == 4:
+                video_frames = [video_frames[i] for i in range(video_frames.shape[0])]
         
         if progress_callback:
             progress_callback(0.9, "Exporting frames to MP4 video...")

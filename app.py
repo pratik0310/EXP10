@@ -28,16 +28,7 @@ OUTPUT_DIR = ROOT / "outputs"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-def build_status_badge() -> str:
-    diag = get_system_diagnostics()
-    device_label = diag["device_name"]
-    if diag["cuda_available"]:
-        device_label += f" ({diag['vram_total_gb']} GB VRAM)"
-    return (
-        f"**Engine:** `{diag['model_id']}` &nbsp;|&nbsp; "
-        f"**Device:** `{device_label}` &nbsp;|&nbsp; "
-        f"**PyTorch:** `{diag['torch_version']}`"
-    )
+
 
 
 def build_system_report() -> str:
@@ -147,8 +138,6 @@ EXAMPLES = [
 
 CUSTOM_CSS = """
 .container { max-width: 1240px; margin: 0 auto; }
-.status-bar { padding: 10px 16px; border-radius: 8px; background-color: #f1f5f9; border: 1px solid #e2e8f0; font-size: 0.9rem; margin-bottom: 12px; }
-.dark .status-bar { background-color: #1e293b; border-color: #334155; }
 .meta-card { padding: 12px; border-radius: 8px; background-color: #f8fafc; border: 1px solid #e2e8f0; }
 .dark .meta-card { background-color: #0f172a; border-color: #1e293b; }
 """
@@ -156,13 +145,11 @@ CUSTOM_CSS = """
 diag_info = get_system_diagnostics()
 default_low_vram = diag_info["cuda_available"] and (diag_info["vram_total_gb"] <= 4.5)
 
-with gr.Blocks(title="Text-to-Video Foundation Studio", css=CUSTOM_CSS, theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate")) as demo:
+with gr.Blocks(title="Text-to-Video Generator", css=CUSTOM_CSS, theme=gr.themes.Soft(primary_hue="blue", neutral_hue="slate")) as demo:
     gr.Markdown("""
-    # Text-to-Video Foundation Studio
-    Generate short, high-coherence video clips directly from text descriptions using open-source video foundation models.
+    # Text-to-Video Generator
+    Generate short videos directly from natural language prompts using a pretrained foundation model.
     """)
-    
-    gr.Markdown(build_status_badge(), elem_classes=["status-bar"])
 
     with gr.Tabs():
         with gr.TabItem("Studio"):
